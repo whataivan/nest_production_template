@@ -1,0 +1,22 @@
+
+ If you want to exclude authorization logic you may use this two decorators on your
+ api endpoint: @Roles(Role.withoutToken) @SkipAuth()
+
+ Endpoint example:
+                     @Roles(Role.withoutToken)
+                     @SkipAuth()
+                     @Post('scan_material')
+                     async scan(
+                       @Body() { rawMaterialId }: { rawMaterialId: number },
+                       @User() authUser?: IUser,
+                     ) {
+                       await this.commandBus.execute<CreateScanMaterialReportCommand>(
+                         new CreateScanMaterialReportCommand(rawMaterialId, authUser),
+                       );
+
+                       return this.queryBus.execute<FindRawMaterialQuery, RawMaterialEntity>(
+                         new FindRawMaterialQuery({
+                           rawMaterialId,
+                         }),
+                       );
+                     }
