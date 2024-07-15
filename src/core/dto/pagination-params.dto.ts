@@ -1,8 +1,8 @@
 import { IsIn, IsInt, IsOptional, IsString, Max, Min } from 'class-validator';
 import { Expose, Transform, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
-import { IPaginationParams } from '../../shared/common/pagination-params.intergace';
-import { SortDirectionEnum } from '../../shared/emuns/sort-direction.enum';
+import { IPaginationParams} from "../interfaces/pagination-params.intergace";
+import { SortDirectionEnum} from "../enums/sort-direction.enum";
 
 export class PaginationParamsDto implements IPaginationParams {
   @ApiProperty({

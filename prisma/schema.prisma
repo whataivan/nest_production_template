@@ -12,3 +12,29 @@ datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        Int           @id @default(autoincrement()) @map("id")
+  login     String        @unique
+  name      String?
+  role      String
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  sessions  AuthSession[]
+
+  @@map("users")
+}
+
+model AuthSession {
+  id         Int      @id @default(autoincrement()) @map("id")
+  userId     Int
+  deviceId   String   @unique
+  deviceName String
+  ip         String
+  createdAt  DateTime @default(now())
+  issuedAt   DateTime
+  expireAt   DateTime
+  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("auth_sessions")
+}

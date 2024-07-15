@@ -11,7 +11,6 @@ import {
   ApiTags,
   ApiTooManyRequestsResponse,
 } from '@nestjs/swagger';
-import { ThrottlerGuard } from '@nestjs/throttler';
 import { errorsDescriptions } from '../enums/errors-descriptions.enum';
 import { NoOmitValidationPipe } from '../validation/no-omit-validation.pipe';
 import { ValidationPipe } from '../validation/validation.pipe';
@@ -44,7 +43,7 @@ export function Controller(
       path,
     }),
     UsePipes(Validator),
-    UseGuards(ThrottlerGuard, JwtGuard, RolesGuard),
+    UseGuards( JwtGuard, RolesGuard),
     ApiTags(path),
     ApiSecurity('accessToken'),
     ApiBadRequestResponse({
@@ -53,8 +52,6 @@ export function Controller(
     ApiInternalServerErrorResponse({
       description: errorsDescriptions.serverErr,
     }),
-    ApiTooManyRequestsResponse({
-      description: errorsDescriptions.toManyRequest,
-    }),
+
   );
 }
