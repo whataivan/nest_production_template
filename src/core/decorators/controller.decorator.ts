@@ -43,15 +43,8 @@ export function Controller(
       path,
     }),
     UsePipes(Validator),
-    UseGuards( JwtGuard, RolesGuard),
+    // UseGuards(JwtGuard, RolesGuard),
     ApiTags(path),
     ApiSecurity('accessToken'),
-    ApiBadRequestResponse({
-      description: errorsDescriptions.badRequest,
-    }),
-    ApiInternalServerErrorResponse({
-      description: errorsDescriptions.serverErr,
-    }),
-
   );
 }

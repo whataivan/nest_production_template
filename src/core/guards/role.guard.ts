@@ -16,14 +16,10 @@ export class RolesGuard implements CanActivate {
       requiredRoles = [Role.admin];
     }
 
-    if (requiredRoles.includes(Role.withoutToken)) {
-      return true;
-    }
-
     const { user } = context.switchToHttp().getRequest();
 
     if (!user) {
-      console.error('User does not find');
+      console.error('User not found');
       return false;
     }
     return requiredRoles.some((role) => user.role === role);

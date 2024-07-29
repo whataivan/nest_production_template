@@ -15,7 +15,7 @@ datasource db {
 
 model User {
   id        Int           @id @default(autoincrement()) @map("id")
-  login     String        @unique
+  email     String        @unique
   name      String?
   role      String
   createdAt DateTime      @default(now())
@@ -26,15 +26,13 @@ model User {
 }
 
 model AuthSession {
-  id         Int      @id @default(autoincrement()) @map("id")
-  userId     Int
-  deviceId   String   @unique
-  deviceName String
-  ip         String
-  createdAt  DateTime @default(now())
-  issuedAt   DateTime
-  expireAt   DateTime
-  user       User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id        Int      @id @default(autoincrement()) @map("id")
+  userId    Int
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  ip        String
+  createdAt DateTime @default(now())
+  issuedAt  DateTime
+  expireAt  DateTime
 
   @@map("auth_sessions")
 }
