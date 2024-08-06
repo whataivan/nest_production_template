@@ -11,13 +11,17 @@ import {
   Length,
   Matches,
   Max,
+  MaxLength,
   Min,
+  MinLength,
 } from 'class-validator';
-import { Expose, Transform, Type } from 'class-transformer';
+import { Exclude, Expose, Transform, Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
 
-import {Role} from "../../core/enums/role.enum";
-import {IUser} from "./interfaces/user.interface";
+import { Role } from '../../core/enums/role.enum';
+import { IUser } from './interfaces/user.interface';
+import { CreateUserDto } from '../api/dto/request/create-user.dto';
+import { UpdateUserDto } from '../api/dto/request/update-user.dto';
 
 export class UserEntity implements IUser {
   @IsInt()
@@ -31,13 +35,29 @@ export class UserEntity implements IUser {
   })
   id: number;
 
+  // @IsString()
+  // @Expose()
+  // @ApiProperty({
+  //   description: 'User login',
+  //   example: 'user1',
+  // })
+  // login: string;
+
   @IsString()
   @Expose()
   @ApiProperty({
-    description: 'User login',
-    example: 'user1',
+    description: 'User name',
+    example: 'David Smith',
   })
-  login: string;
+  name: string;
+
+  @IsString()
+  @Expose()
+  @ApiProperty({
+    description: 'email',
+    example: 'email@mail.com',
+  })
+  email: string;
 
   @IsEnum(Role)
   @Expose()
@@ -48,27 +68,19 @@ export class UserEntity implements IUser {
   })
   role: Role;
 
-
   @IsString()
   passwordHash: string;
 
-  @IsString()
   @Expose()
+  @Exclude()
+  @MinLength(6)
+  @MaxLength(25)
   @ApiProperty({
-    description: 'User name',
-    example: 'David Smith',
+    name: 'Password',
+    description: 'Password',
+    example: '1234565',
   })
-  name: string;
-
-
-  @IsString()
-  @Expose()
-  @ApiProperty({
-    description: 'email',
-    example: 'email@mail.com',
-  })
-  email: string;
-
+  password?: string;
 
   @IsDate()
   @Expose()
@@ -77,52 +89,40 @@ export class UserEntity implements IUser {
     description: 'The date and time when the user was created',
     example: '2021-08-21T15:52:04.000Z',
     type: Date,
-      required:false
+    required: false,
   })
   createdAt?: Date;
 
-    @IsDate()
-    @Expose()
-    @IsOptional()
-    @ApiProperty({
-        description: 'The date and time when the user was created',
-        example: '2021-08-21T15:52:04.000Z',
-        type: Date,
-        required:false
-    })
-    updatedAt?: Date;
+  @IsDate()
+  @Expose()
+  @IsOptional()
+  @ApiProperty({
+    description: 'The date and time when the user was created',
+    example: '2021-08-21T15:52:04.000Z',
+    type: Date,
+    required: false,
+  })
+  updatedAt?: Date;
 
+  static create(
+    dto: CreateUserDto & {
+      passwordHash: string;
+    },
+  ) {
+    const user = new UserEntity();
+    user.passwordHash = dto.passwordHash;
+    user.name = dto.name;
+    user.role = dto.role;
+    user.email = dto.email;
 
+    return user;
+  }
 
-
-
-  // static create(
-  //   dto: CreateUserDto & {
-  //     passwordHash: string;
-  //   },
-  // ) {
-  //   const user = new UserEntity();
-  //   user.login = dto.login;
-  //   user.passwordHash = dto.passwordHash;
-  //   user.name = dto.name;
-  //   user.role = dto.role;
-  //   user.isActive = dto.isActive;
-  //   user.email = dto.email;
-  //   user.pincode = dto.pincode;
-  //   user.workingZoneIds = dto.workingZoneIds;
-  //
-  //   return user;
-  // }
-
-  // update(dto: UpdateUserDto) {
-  //   this.name = dto.name;
-  //   this.role = dto.role;
-  //   this.isActive = dto.isActive;
-  //   this.login = dto.login;
-  //   this.email = dto.email;
-  //   this.pincode = dto.pincode;
-  //   this.workingZoneIds = dto.workingZoneIds;
-  // }
+  update(dto: UpdateUserDto) {
+    this.name = dto.name;
+    this.role = dto.role;
+    this.email = dto.email;
+  }
 
   setPasswordHash(passwordHash: string) {
     this.passwordHash = passwordHash;

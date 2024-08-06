@@ -1,53 +1,39 @@
-// import {
-//   ConflictException,
-//   Injectable,
-//   InternalServerErrorException,
-// } from '@nestjs/common';
-// import { AuthSession } from '@prisma/client';
-// import { PrismaService } from '../../prisma/prisma.service';
-// import { AuthSessionMapper } from './helpers/auth-session.mapper';
-// import { AuthSessionEntity } from '../domain/auth-session.entity';
-//
-// @Injectable()
-// export class AuthRepository {
-//   constructor(private prisma: PrismaService) {}
-//
-//   async createSession(
-//     sessionEntity: AuthSessionEntity,
-//   ): Promise<AuthSessionEntity> {
-//     const data = AuthSessionMapper.toModel(sessionEntity);
-//     const session = await this.prisma.authSession.create({
-//       data,
-//     });
-//     if (!session) return;
-//     return AuthSessionMapper.toEntity(session);
-//   }
-//
-//   async findSession({
-//     deviceId,
-//   }: Pick<AuthSession, 'deviceId'>): Promise<AuthSessionEntity> {
-//     const session = await this.prisma.authSession.findUnique({
-//       where: { deviceId },
-//     });
-//     if (!session) return;
-//     return AuthSessionMapper.toEntity(session);
-//   }
-//
-//   async deleteSession({
-//     deviceId,
-//   }: Pick<AuthSession, 'deviceId'>): Promise<boolean> {
-//     if (!deviceId) throw new ConflictException();
-//     const result = await this.prisma.authSession.deleteMany({
-//       where: { deviceId },
-//     });
-//     return !!result;
-//   }
-//
-//   async deleteSessionsByUserId(userId: number) {
-//     if (!userId) throw new ConflictException();
-//     const result = await this.prisma.authSession.deleteMany({
-//       where: { userId },
-//     });
-//     return !!result;
-//   }
-// }
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../../prisma/prisma.service'; // Путь к вашему сервису Prisma
+import { AuthSessionEntity } from '../domain/auth-session.entity';
+import { AuthSessionMapper } from './helpers/auth-session.mapper';
+
+@Injectable()
+export class AuthSessionRepository {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(entity: AuthSessionEntity): Promise<AuthSessionEntity> {
+    const model = AuthSessionMapper.toModel(entity);
+    const created = await this.prisma.authSession.create({
+      data: model,
+    });
+    return AuthSessionMapper.toEntity(created);
+  }
+
+  async findById(id: number): Promise<AuthSessionEntity> {
+    const model = await this.prisma.authSession.findUnique({
+      where: { id },
+    });
+    return AuthSessionMapper.toEntity(model);
+  }
+
+  async update(entity: AuthSessionEntity): Promise<AuthSessionEntity> {
+    const model = AuthSessionMapper.toModel(entity);
+    const updated = await this.prisma.authSession.update({
+      where: { id: model.id },
+      data: model,
+    });
+    return AuthSessionMapper.toEntity(updated);
+  }
+
+  async delete(id: number): Promise<void> {
+    await this.prisma.authSession.delete({
+      where: { id },
+    });
+  }
+}

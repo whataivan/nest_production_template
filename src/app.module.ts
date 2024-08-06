@@ -6,7 +6,7 @@ import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 
-const applicationModules = [UserModule];
+const appModules = [UserModule];
 
 @Module({
   imports: [
@@ -19,8 +19,9 @@ const applicationModules = [UserModule];
       serveRoot: '/swagger',
     }),
     PrismaModule,
-    ...applicationModules,
+    ...appModules,
   ],
+
   controllers: [],
   providers: [],
 })

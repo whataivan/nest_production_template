@@ -9,7 +9,9 @@ import {
 
 export const configApp = (app: INestApplication) => {
   app.use(cookieParser());
+
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
+
   app.enableCors({
     origin: ['http://localhost:3000'],
     methods: 'GET, HEAD, PUT, PATCH, POST, DELETE, OPTIONS',
@@ -18,5 +20,6 @@ export const configApp = (app: INestApplication) => {
     credentials: true,
     allowedHeaders: ['Accept', 'Content-Type', 'Authorization'],
   });
+
   app.useGlobalFilters(new ErrorExceptionFilter(), new HttpExceptionFilter());
 };

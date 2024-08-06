@@ -8,7 +8,6 @@ export function handleError(e: HandleErrorProps) {
   if (e instanceof HttpException) {
     throw e;
   }
-
   console.error(e.message);
-  throw new InternalServerErrorException(`Something wrong. ${e.message}`);
+  throw new InternalServerErrorException(`Error. ${e.message}`);
 }

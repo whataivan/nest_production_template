@@ -4,6 +4,7 @@ import { Controller } from '../../core/decorators/controller.decorator';
 import { Get } from '@nestjs/common';
 import { Roles } from '../../core/decorators/roles.decorator';
 import { Role } from '../../core/enums/role.enum';
+import { UserService } from '../infrastructure/user.service';
 
 @Controller(ApiRoutes.users)
 export class UserController {

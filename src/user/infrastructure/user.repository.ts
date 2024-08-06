@@ -5,14 +5,26 @@ import { PrismaService } from '../../prisma/prisma.service';
 import { UserEntity } from '../domain/user.entity';
 import { UserMapper } from './helpers/user.mapper';
 import { IdDto } from '../../core/dto/id.dto';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class UserRepository {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private readonly configService: ConfigService,
+  ) {}
 
   async findOne({ id }: IdDto): Promise<UserEntity> {
     const result = await this.prisma.user.findUnique({
       where: { id },
+    });
+
+    return UserMapper.toEntity(result);
+  }
+
+  async findByEmail(email: string): Promise<UserEntity> {
+    const result = await this.prisma.user.findUnique({
+      where: { email },
     });
 
     return UserMapper.toEntity(result);
@@ -33,16 +45,21 @@ export class UserRepository {
   }
 
   async update(
+    { id }: IdDto,
     entity: UserEntity,
     prisma: Omit<PrismaClient, runtime.ITXClientDenyList> = this.prisma,
   ): Promise<UserEntity> {
     const data = UserMapper.toModel(entity);
     const userModel = await prisma.user.update({
-      where: { id: entity.id },
+      where: { id },
       data: {
         ...data,
       },
     });
     return UserMapper.toEntity(userModel);
+  }
+
+  async delete({ id }: IdDto): Promise<void> {
+    await this.prisma.user.delete({ where: { id } });
   }
 }
