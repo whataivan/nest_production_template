@@ -7,6 +7,6 @@ import { SerializationInterceptor } from '../interceptors/serialization.intercep
  * @see [Decorator composition - NestJS](https://docs.nestjs.com/custom-decorators#decorator-composition)
  * @param entity Constructor of class to which the method response must satisfy
  */
-export function Serializable(entity: ClassConstructor<unknown>) {
+export function Serialize(entity: ClassConstructor<unknown>) {
   return applyDecorators(UseInterceptors(new SerializationInterceptor(entity)));
 }

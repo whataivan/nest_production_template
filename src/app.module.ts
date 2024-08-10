@@ -3,8 +3,10 @@ import { Module } from '@nestjs/common';
 import { join } from 'path';
 import { PrismaModule } from './prisma/prisma.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './user/user.module';
+import { BaseController } from './core/controllers/base.controller';
+import { JwtService } from '@nestjs/jwt';
 
 const appModules = [UserModule];
 
@@ -22,7 +24,7 @@ const appModules = [UserModule];
     ...appModules,
   ],
 
-  controllers: [],
-  providers: [],
+  controllers: [BaseController],
+  providers: [JwtService, ConfigService],
 })
 export class AppModule {}

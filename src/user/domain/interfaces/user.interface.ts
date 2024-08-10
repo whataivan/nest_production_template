@@ -5,6 +5,6 @@ export interface IUser {
   role: string;
   createdAt?: Date;
   updatedAt?: Date;
-  password?: string;
+  password: string;
   // sessions: AuthSession[];
 }

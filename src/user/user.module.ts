@@ -6,8 +6,8 @@ import { ConfigService } from '@nestjs/config';
 import { Module } from '@nestjs/common';
 import { UserRepository } from './infrastructure/user.repository';
 import { UserController } from './api/user.controller';
-import { UserService } from './infrastructure/user.service';
-import { AuthService } from './infrastructure/auth.service';
+import { UserService } from './services/user.service';
+import { AuthService } from './services/auth.service';
 import { AuthSessionRepository } from './infrastructure/auth.repository';
 import { AuthController } from './api/auth.controller';
 

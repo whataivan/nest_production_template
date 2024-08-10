@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service'; // Путь к вашему сервису Prisma
 import { AuthSessionEntity } from '../domain/auth-session.entity';
-import { AuthSessionMapper } from './helpers/auth-session.mapper';
+import { AuthSessionMapper } from './mappers/auth-session.mapper';
 
 @Injectable()
 export class AuthSessionRepository {

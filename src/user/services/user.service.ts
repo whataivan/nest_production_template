@@ -4,7 +4,7 @@ import {
   NotFoundException,
   OnModuleInit,
 } from '@nestjs/common';
-import { UserRepository } from './user.repository';
+import { UserRepository } from '../infrastructure/user.repository';
 import { IdDto } from '../../core/dto/id.dto';
 import { CreateUserDto } from '../api/dto/request/create-user.dto';
 import { UserEntity } from '../domain/user.entity';
@@ -48,6 +48,7 @@ export class UserService implements OnModuleInit {
     try {
       const user = await this.userRepository.findOne(idDto);
       if (!user) throw new NotFoundException('User not found');
+      return user;
     } catch (error) {
       handleError(error);
     }

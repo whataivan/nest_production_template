@@ -4,6 +4,7 @@ import {
   IsArray,
   IsBoolean,
   IsDate,
+  IsEmail,
   IsEnum,
   IsInt,
   IsOptional,
@@ -35,14 +36,6 @@ export class UserEntity implements IUser {
   })
   id: number;
 
-  // @IsString()
-  // @Expose()
-  // @ApiProperty({
-  //   description: 'User login',
-  //   example: 'user1',
-  // })
-  // login: string;
-
   @IsString()
   @Expose()
   @ApiProperty({
@@ -53,6 +46,7 @@ export class UserEntity implements IUser {
 
   @IsString()
   @Expose()
+  @IsEmail({}, { message: 'Invalid email' })
   @ApiProperty({
     description: 'email',
     example: 'email@mail.com',
@@ -72,15 +66,14 @@ export class UserEntity implements IUser {
   passwordHash: string;
 
   @Expose()
-  @Exclude()
   @MinLength(6)
   @MaxLength(25)
+  @IsString()
   @ApiProperty({
-    name: 'Password',
     description: 'Password',
     example: '1234565',
   })
-  password?: string;
+  password: string;
 
   @IsDate()
   @Expose()
@@ -122,9 +115,5 @@ export class UserEntity implements IUser {
     this.name = dto.name;
     this.role = dto.role;
     this.email = dto.email;
-  }
-
-  setPasswordHash(passwordHash: string) {
-    this.passwordHash = passwordHash;
   }
 }

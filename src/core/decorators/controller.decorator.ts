@@ -1,21 +1,12 @@
 import {
   applyDecorators,
   Controller as BaseController,
-  UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import {
-  ApiBadRequestResponse,
-  ApiInternalServerErrorResponse,
-  ApiSecurity,
-  ApiTags,
-  ApiTooManyRequestsResponse,
-} from '@nestjs/swagger';
-import { errorsDescriptions } from '../enums/errors-descriptions.enum';
+import { ApiSecurity, ApiTags } from '@nestjs/swagger';
+
 import { NoOmitValidationPipe } from '../validation/no-omit-validation.pipe';
 import { ValidationPipe } from '../validation/validation.pipe';
-import { JwtGuard } from '../guards/jwt.guard';
-import { RolesGuard } from '../guards/role.guard';
 
 /**
  * Interface of controller options
@@ -43,7 +34,6 @@ export function Controller(
       path,
     }),
     UsePipes(Validator),
-    // UseGuards(JwtGuard, RolesGuard),
     ApiTags(path),
     ApiSecurity('accessToken'),
   );

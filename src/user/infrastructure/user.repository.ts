@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client';
 import * as runtime from '@prisma/client/runtime/library';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UserEntity } from '../domain/user.entity';
-import { UserMapper } from './helpers/user.mapper';
+import { UserMapper } from './mappers/user.mapper';
 import { IdDto } from '../../core/dto/id.dto';
 import { ConfigService } from '@nestjs/config';
 

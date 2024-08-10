@@ -9,11 +9,11 @@ export class SwaggerConfig {
       .setTitle('My API')
       .setDescription('API description')
       .setVersion('1.0')
-      .addTag('mytag')
+      .addTag('')
       .build();
 
     const document = SwaggerModule.createDocument(app, options);
-    SwaggerModule.setup('api', app, document);
+    SwaggerModule.setup('documentation', app, document);
   }
 
   static writeSwaggerFile(host: string, port: string, mode: string): void {
@@ -26,7 +26,5 @@ export class SwaggerConfig {
 
     const outputPath = join(__dirname, 'swagger-config.json');
     writeFileSync(outputPath, JSON.stringify(swaggerData, null, 2));
-
-    // console.log(`Swagger config file written to ${outputPath}`);
   }
 }
