@@ -7,7 +7,7 @@ export class FakeDataHelper {
     const user: CreateUserDto = {
       name: faker.internet.userName(),
       email: faker.internet.email(),
-      role: role || Role.user,
+      role,
       password: faker.internet.password(),
     };
     return user;
