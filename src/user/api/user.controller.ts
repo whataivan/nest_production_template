@@ -4,7 +4,7 @@ import {
   ApiOkResponse,
 } from '@nestjs/swagger';
 import { ApiRoutes } from '../../core/config/api-routes.enum';
-import { Body, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Delete, Get, Param, Post, Put, UseGuards } from '@nestjs/common';
 import { Roles } from '../../core/decorators/roles.decorator';
 import { Role } from '../../core/enums/role.enum';
 import { UserService } from '../services/user.service';
@@ -15,6 +15,7 @@ import { UserView } from './dto/response/user.view';
 import { Serialize } from '../../core/decorators/serializable.decorator';
 import { JwtGuard } from '../../core/guards/jwt.guard';
 import { RolesGuard } from '../../core/guards/role.guard';
+import { UpdateUserDto } from './dto/request/update-user.dto';
 
 @Controller(ApiRoutes.users)
 export class UserController {
@@ -50,14 +51,38 @@ export class UserController {
     return await this.userService.findOne(idDto);
   }
 
-  // //------------------FIND MANY----------------------------
-  // @ApiOperation({ summary: 'Get user' })
-  // @Roles(Role.superadmin, Role.admin)
-  // @ApiCreatedResponse({
-  //   description: 'Successful',
-  // })
-  // @Get('')
-  // async findMany() {
-  //   return await this.userService.fi(idDto);
-  // }
+  //------------------UPDATE---------------------------
+  @ApiOperation({ summary: 'Update user' })
+  @Roles(Role.admin)
+  @ApiOkResponse({
+    description: 'Successful',
+    type: UserView,
+  })
+  @Serialize(UserView)
+  @Put(':id')
+  async update(@Param() idDto: IdDto, @Body() dto: UpdateUserDto) {
+    return await this.userService.update(idDto, dto);
+  }
+
+  //------------------FIND MANY----------------------------
+  @ApiOperation({ summary: 'Get user' })
+  @Roles(Role.superadmin, Role.admin)
+  @ApiCreatedResponse({
+    description: 'Successful',
+  })
+  @Get()
+  async findMany() {
+    return await this.userService.findMany();
+  }
+
+  //------------------DELETE---------------------------
+  @ApiOperation({ summary: 'Delete user' })
+  @Roles(Role.admin)
+  @ApiOkResponse({
+    description: 'Successful',
+  })
+  @Delete(':id')
+  async delete(@Param() idDto: IdDto) {
+    return await this.userService.delete(idDto);
+  }
 }

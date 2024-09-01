@@ -59,6 +59,12 @@ export class UserRepository {
     return UserMapper.toEntity(userModel);
   }
 
+  async findMany(): Promise<UserEntity[]> {
+    const results = await this.prisma.user.findMany({});
+
+    return results.map((u) => UserMapper.toEntity(u));
+  }
+
   async delete({ id }: IdDto): Promise<void> {
     await this.prisma.user.delete({ where: { id } });
   }

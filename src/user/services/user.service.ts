@@ -59,7 +59,15 @@ export class UserService implements OnModuleInit {
       const user = await this.userRepository.findOne(idDto);
       if (!user) throw new NotFoundException('User not found');
       user.update(updateDto);
-      await this.userRepository.update(idDto, user);
+      return await this.userRepository.update(idDto, user);
+    } catch (error) {
+      handleError(error);
+    }
+  }
+
+  async findMany() {
+    try {
+      await this.userRepository.findMany();
     } catch (error) {
       handleError(error);
     }
@@ -78,13 +86,11 @@ export class UserService implements OnModuleInit {
   async createSuperAdmin() {
     try {
       const email = this.configService.get('SUPER_ADMIN_EMAIL');
-
       const password = this.configService.get('SUPER_ADMIN_PASSWORD');
 
       const isSuperAdminExists = await this.userRepository.findByEmail(email);
 
       if (isSuperAdminExists) {
-        // console.log('RETURN');
         return;
       }
 

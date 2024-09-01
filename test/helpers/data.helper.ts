@@ -32,9 +32,7 @@ export class DataHelper {
       .post(`/${ApiRoutes.auth}/login`)
       .send(data)
       .expect(HttpStatus.OK);
-
     const response = body as LoginResponseDto;
-
     expect(response.accessToken).toBeDefined();
     expect(response.role).toBeDefined();
     expect(response.userId).toBeDefined();
@@ -86,6 +84,10 @@ export class DataHelper {
   }
 
   async getTokens() {
+    if (!this.superAdminToken) {
+      await this.loginSuperAdmin();
+    }
+
     const adminData = this.fakeDataHelper.createFakeUser(Role.admin);
     const userData = this.fakeDataHelper.createFakeUser(Role.user);
 
